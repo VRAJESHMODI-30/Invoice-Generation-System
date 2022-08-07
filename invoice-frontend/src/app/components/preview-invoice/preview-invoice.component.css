@@ -1,0 +1,41 @@
+.invoice{
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+ @media only screen and (max-width:1000px) {
+    #invoice{
+        font-size: x-small;
+    }
+    #downloadBtn{
+        font-size: x-small;
+    }
+    #shareBtn{
+        font-size: x-small;
+    }
+    #cmpy_nm{
+        font-size: small;
+    }
+    #title{
+        font-size: medium;
+    }
+ }
+
+ @media only screen and (max-width:750px){
+    #invoice{
+        font-size: 7px;
+        width: 100vw;
+        height: 70vh;
+        /* margin-right: 10px; */
+    }
+    #downloadBtn{
+        font-size: xx-small;
+    }
+    #shareBtn{
+        font-size: xx-small;
+    }
+    #cmpy_nm{
+        font-size: x-small;
+    }
+    #title{
+        font-size: small;
+    }
+ }

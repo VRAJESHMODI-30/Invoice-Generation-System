@@ -1,0 +1,20 @@
+<!-- Sidebar -->
+<ul id="sideBar">
+      <li class="text-center" id="barHead"><i class="fa fa-bars mr-2 mt-3 p-3 border border-1" (touchend)="toggle()" aria-hidden="true"><span *ngIf="text">&nbsp;Invoice</span></i></li>
+
+      <li><a routerLink="#customers" routerLinkActive="active"><i class="fa fa-user-o" aria-hidden="true"><span *ngIf="text">&nbsp;Customers </span></i><span *ngIf="text" class="position-absolute end-0 ml-3"><i class="fa fa-plus-circle" aria-hidden="true"></i></span></a>
+      </li>
+
+      <li><a routerLink="/item" routerLinkActive="active"><i class="fa fa-shopping-basket" aria-hidden="true"><span *ngIf="text">&nbsp;Items </span></i><span *ngIf="text" class="position-absolute end-0 ml-4 pl-3"><i class="fa fa-plus-circle" aria-hidden="true"></i></span></a>
+      </li>
+
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"><i class="fa fa-file-text-o" aria-hidden="true"><span *ngIf="text"> &nbsp; Invoices </span></i><span *ngIf="text" class="position-absolute end-0 ml-4 pl-1"><i class="fa fa-plus-circle" aria-hidden="true"></i></span></a>
+      </li>
+</ul>
+
+<!-- Components -->
+<div class="content" id="con">
+      <router-outlet></router-outlet>
+      <!-- <app-invoice></app-invoice> -->
+      <!-- <app-new-invoice></app-new-invoice> -->
+</div>

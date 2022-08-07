@@ -1,0 +1,226 @@
+<div class="container-fluid my-4 outer pr-4">
+      <div class="row mb-3">
+            <div class="col-12">
+                  <h4> <i class="fa fa-file-text-o" aria-hidden="true"></i>&nbsp; New Invoice</h4>
+            </div>
+      </div>
+      <!-- {{InvoiceModel | json}} -->
+      <form action="#" method="post" #invoiceForm="ngForm" (ngSubmit)="onSubmit()">
+                  <div class="border-top border-bottom bg-light mb-4" style="--bs-bg-opacity: 0.03;">
+                        <div class="row mt-4">
+                              <label for="name" class="text-danger col-3">Customer name <sup>*</sup></label>
+                              <div class="btn-group col-5">
+                                    <input class="col-11" type="text" id="name" list="cus_names" autocomplete="off" name="Cus_nm" [(ngModel)] = "InvoiceModel.Cus_nm" required/>
+                                    <datalist id="cus_names">
+                                          <option *ngFor="let ele of nameSet" value={{ele}}>
+                                          <!-- <option value="Logan Paul"> -->
+                                    </datalist>
+                                    <a routerLink="#new-customer" class="btn btn-success col text-light ">New</a>
+                              </div>
+                        </div>
+                        <div class="row">
+                              <label for="name" class="text-danger col-3">GSTIN <sup>*</sup></label>
+                              <input class="col-5" type="text" id="name" autocomplete="off" name="GSTIN" placeholder="eg. 22AAAAA0000A1Z5" [(ngModel)]="InvoiceModel.gstin" required/>
+                        </div>
+                        <div class="row">
+                              <label for="name" class="text-danger col-3">Place Of Supply<sup>*</sup></label>
+                              <select class="col-5" name="name" id="name" [(ngModel)]="InvoiceModel.pos" (change)="onChange(invoiceForm)" required>
+                                    <option *ngFor="let title of state" [value]="title">{{title}}</option>
+                                    
+                              </select>
+                        </div>
+                  </div>
+            <div class="row">
+                  <label for="id" class="text-danger col-3">Invoice# <sup>*</sup></label>
+                  <input class="col-3" type="text" id="id" autocomplete="off" placeholder="eg. INV-000003" name="Inv_num" [(ngModel)] = "InvoiceModel.Inv_num" required>
+            </div>
+            <div class="row">
+                  <label for="order-number" class="col-3">OrderNumber</label>
+                  <input class="col-3" type="text" id="order-number" autocomplete="off" name="Ord_num" [(ngModel)] = "InvoiceModel.Ord_num" />
+            </div>
+            <div class="row border-bottom pb-3">
+                  <label for="invoice-date" class="text-danger col-2">Invoice Date <sup>*</sup></label>
+                  <input class="col-2" type="date" id="invoice-date" name="Inv_dt" [(ngModel)] = "InvoiceModel.Inv_dt" required>
+                  <label class="col-2 text-center" for="terms">Terms</label>
+                  <div class="col-2">
+                        <select id="terms" name="term" [(ngModel)] = "InvoiceModel.Term" >
+                              <option value="" disabled>Due on Receipt</option>
+                              <option value="Net 40">Net 40</option>
+                              <option value="Net 50">Net 50</option>
+                              <option value="Net 60">Net 60</option>
+                        </select></div>
+                  <label class="col-2 text-center" for="due-date">Due Date</label>
+                  <input class="col-2" type="date" id="due-date" name="Due_dt" [(ngModel)] = "InvoiceModel.Due_dt"/>
+            </div>
+            <div class="row border-bottom pb-3">
+                  <label for="subject" class="col-2">Subject</label>
+                  <textarea class="col-5" id="subject" cols="30" rows="1"
+                        placeholder="Let your customer known what this invoice for" name="Subj" [(ngModel)] = "InvoiceModel.Subj"></textarea>
+            </div>
+            <!-- -------- -->
+            <table class="table" >
+                  <tr class="fw-bold fs-6 border">
+                        <td class="col-4 border text-left">ITEM DETAILS</td>
+                        <td class="col-2 border text-right">QUANTITY</td>
+                        <td class="col-2 border text-right">RATE</td>
+                        <td class="col-2 border text-right">TAX</td>
+                        <td class="col-2 border text-right">AMOUNT</td>
+                  </tr>
+                  <tr class="border" *ngFor="let itm of Itm_Obj; let i = index">
+                          <!-- Add dynamic value -->
+                          <!-- <td>{{itm.Itm_amt}}</td> -->
+                        <td class="col-4 border text-left"> <input class="text-left border-0" type="text" name="Itm_det" 
+                                    id="" placeholder="Type the item" [(ngModel)]="Itm_Obj[i].Itm_info"></td>
+                        <td class="col-3 border text-right"> <input class="text-right border-0" type="number" name="Qty" id=""
+                                     [(ngModel)]="itm.Itm_qty" (change)="itm_onChange(itm)" >
+                        </td>
+                        <td class="col-3 border text-right"> <input class="text-right border-0" type="number" name="Rate" id=""
+                                     [(ngModel)]="itm.Itm_rate" (change)="itm_onChange(itm)">
+                        </td>
+                        <td class="col-3 border text-right"> 
+                              <select name="tax" id="" [(ngModel)]="itm.Itm_tax" (change)="itm_onChange(itm)">
+                                    <option value="Non texable">Non taxable</option>
+                                    <option value="Open to scope">Open of Scope</option>
+                                    <option value="Open to scope">Non-GST supply</option>
+                                    
+                                    <optgroup *ngIf="!igstValid; else elseBlock" label="Tax Group">
+                                          <option value={{0}}>GST0 [0%]</option>
+                                          <option value={{5}}>GST5 [5%]</option>
+                                          <option value={{12}}>GST12 [12%]</option>
+                                          <option value={{18}}>GST18 [18%]</option>
+                                          <option value={{28}}>GST28 [28%]</option>
+                                    </optgroup>
+                                    <ng-template #elseBlock>
+                                          <optgroup label="Tax Group">
+                                                <option value={{0}}>IGST0 [0%]</option>
+                                                <option value={{5}}>IGST5 [5%]</option>
+                                                <option value={{12}}>IGST12 [12%]</option>
+                                                <option value={{18}}>IGST18 [18%]</option>
+                                                <option value={{28}}>IGST28 [28%]</option>
+                                          </optgroup>
+                                    </ng-template>
+
+                              </select>
+                        </td>
+                        <td class="col-2 border text-right"><input type="number" name="Amt" id="" value={{itm.Itm_amt}} class="text-right border-0" [(ngModel)] = "itm.Itm_amt" readonly>
+                        </td>
+                  </tr>
+            </table>
+            <div class="row mt-4">
+                  <div class="col-4 pl-5">
+                        <div class="row">
+                              <div class="btn btn-light border border-2 col-5" id="addLnBtn" (click)="addRow()"><i class="fa fa-plus-circle text-primary"
+                                    aria-hidden="true"></i>&nbsp; Add another line
+                              </div>
+                        </div>
+                        <div class="row ms-3 d-flex flex-column">
+                              <label for="customer_notes">Customer Notes</label>
+                              <textarea name="Cus_note" id="customer_notes" cols="30" rows="2" [(ngModel)] = "InvoiceModel.Cus_note" placeholder="Thanks for your business."></textarea>
+                              <p><small>Will be displayed on the invoice</small></p>
+                        </div>
+                  </div>
+                  <div class="col-2">
+                  </div>
+                  <div class="col-6 border border-1 rounded bg-light p-2">
+                        <div class="row mt-3 mb-4">
+                              <label for="sub-total" class="col-6 text-left">Sub Total</label>
+                              <div class="col-6 text-right">{{sub_Total}}</div>
+
+                        </div>
+                        <div class="row mb-4">
+                              <label for="discount" class="col-4 text-left">Discount</label>
+                              <div class="col-4">
+                                    <input class="text-right col-8" type="text" name="Dis" id="discount" value=0 [(ngModel)] = "InvoiceModel.Dis" (change)="discount_onChange($event)" autocomplete="off">
+                                    <label class="col-4" for="discount">
+                                          <select class="bg-light border border-1 border-dark rounded" (change)="disUnit_onChange($event)">
+                                                <option value="rupees">₹</option>
+                                                <option value="percentage">%</option>
+                                          </select>
+                                    </label>
+                              </div>
+                              <div class="col-4 text-right">{{discount}}</div>
+                        </div>
+                        <!-- //----------  -->
+                        <div *ngIf="!igstValid; else elseGstBlock" class="mb-4">
+                              <div *ngFor="let ele of gstSet | keyvalue">
+                                    <div class="row">
+                                          <label  for="discount" class="col-4 text-left">SGST[{{ele.key/2}}%]</label>
+                                          <div class="col"></div>
+                                          <div class="col-4 text-right">+{{ele.value/2}}</div>
+                                    </div>
+                                    <div class="row">
+                                          <label  for="discount" class="col-4 text-left">CGST[{{ele.key/2}}%]</label>
+                                          <div class="col"></div>
+                                          <div class="col-4 text-right">+{{ele.value/2}}</div>
+                                    </div>
+                              </div>
+                        </div>
+                        <ng-template #elseGstBlock class="mb-4">
+                              <div class="row" *ngFor="let ele of igstSet | keyvalue">
+                                    <label  for="discount" class="col-4 text-left">IGST[{{ele.key}}%]</label>
+                                    <div class="col"></div>
+                                    <div class="col-4 text-right">+{{ele.value}}</div>
+                              </div>
+                        </ng-template>
+                        <div class="row mb-4">
+                              <div class="col-2">
+                                    <input class="mr-1" type="radio" name="gst" id="tds" value="tds" [(ngModel)] = "InvoiceModel.tds_tcs"
+                                    (change)="taxType_onChange($event)" autocomplete="off"/>
+                                    <label class="ml-1" for="tds">TDS</label>
+                              </div>
+                              <div class="col-2">
+                                    <input class="mr-1" type="radio" name="gst" id="tcs" value="tcs" [(ngModel)] = "InvoiceModel.tds_tcs"
+                                    (change)="taxType_onChange($event)" autocomplete="off"/>
+                                    <label class="ml-1" for="tcs">TCS</label>
+                              </div>
+                              <div class="col-4 btn-group">
+                                    <input *ngIf="tax_type; else tds_tcs_elseBlock" type="number" name="tds_value" [(ngModel)]="tds_value"
+                                    (change)="tds_tcs_onChange($event)">
+                                    <ng-template #tds_tcs_elseBlock>
+                                          <input type="number" name="tcs_value" [(ngModel)]="tcs_value"
+                                          (change)="tds_tcs_onChange($event)">
+                                    </ng-template>
+                                    <div class="btn btn-light border border-dark border-1" disabled>%</div>
+                              </div>
+                              <div class="col-4 text-right">
+                                    {{TDS_TCS}}
+                              </div>
+                        </div>
+                        <div class="row mb-4">
+                              <div class="col-4"><input type="text" value="Adjustment"></div>
+                              <div class="col-4"><input type="number" class="text-right" name="Adj" [(ngModel)] = "InvoiceModel.Adj" (change)="adj_onChange($event)" autocomplete="off" /></div>
+                              <div class="col-4 text-right">{{Adjusment}}</div>
+                        </div>
+                        <div class="row fs-4 mb-4">
+                              <div class="col-6 text-left font-weight-bold">Total (₹)</div>
+                              <div class="col-6 text-right fw-bold">{{grand_Total}}</div>
+                        </div>
+                  </div>
+            </div>
+            <div class="row">
+                  <div class="border-top position-fixed bottom-0 shadow p-3 bg-body rounded col">
+                        <input type="submit" value="Save as Draft" class="btn btn-light border border-1 mx-2">
+                        <!-- <button type="submit" class="btn btn-light border border-1 mx-2">Save as Draft</button> -->
+                        <div class="btn btn-success border border-1 mx-2" (click)="sendEmail()">Save and Send</div>
+                        <div class="btn btn-light border border-1 mx-2"
+                              (click)="cancleClk()">Cancel</div>
+                  </div>
+            </div>
+      </form>
+
+      <div class="pb-5">
+            <div class="row ms-2 py-4 border-top border-bottom border-1 bg-light bg-opacity-10 d-flex flex-column">
+                  <div class="d-flex my-1">
+                        Want to get paid faster?
+                        <i class="fa fa-cc-mastercard mx-1" aria-hidden="true"></i> 
+                        <i class="fa fa-cc-visa mx-1" aria-hidden="true"></i> 
+                  </div>
+                  <div class="d-flex my-1">
+                        Configure payment gateways and receive payments online. &nbsp;
+                        <a href="#Payment-Gtaeway" class="text-decoration-none">Set up Payment Gateway</a>
+                  </div>
+            </div>
+      </div>
+
+      
+</div>

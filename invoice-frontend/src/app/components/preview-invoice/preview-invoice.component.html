@@ -1,0 +1,222 @@
+<div class="container-fluid mt-2" id="invoice">
+    <div class="d-flex flex-row-reverse bd-highlight">
+        <button id="downloadBtn" class="btn btn-success my-3 mx-1 text-right bd-highlight" (click)="makePDF()">Download PDF</button>
+        <button id="emailBtn" routerLink="/send-email" class="btn btn-success my-3 mx-1 text-right bd-highlight">Send Email</button>
+        <button id="shareBtn"  class="btn btn-success my-3 mx-1 text-right bd-highlight" (click)="sharePDF()">Share PDF</button>
+    </div>
+    <div id="test"></div>
+      <div class="invoice" id="download-invoice" #content>
+            <div id="upperPart" class="p-3">
+                  <div class="row border border-1 border-dark">
+                        <div class="col text-left pl-4">
+                              <h3 class="font-weight-bold" id="cmpy_nm">Company name,</h3>
+                              {{InvoiceData.Org_des}}
+                              <p class="pt-2">
+                              India
+                              </p>
+                              <p>
+                                    {{"GSTIN " + Org_Gstin}}
+                              </p>
+                        </div>
+                        <div class="col text-right">
+                              <h1 class="pt-3" id="title">TAX INVOICE</h1>
+                        </div>
+                  </div>
+                  <div class="row border border-1 border-dark">
+                        <div class="col-3">
+                              <p># &nbsp; :</p>
+                              <p>Invoice Date &nbsp; :</p>
+                              <p>Terms &nbsp; :</p>
+                              <p>Due Date &nbsp; :</p>
+                              <p>Order number &nbsp; :</p>
+                        </div>
+                        <div class="col-3">
+                              <strong>
+                              <p> {{InvoiceData.Inv_num}}</p>
+                              <p> {{InvoiceData.Inv_dt}}</p>
+                              <p> {{InvoiceData.Term}}</p>
+                              <p> {{InvoiceData.Due_dt}}</p>
+                              <p> {{InvoiceData.Ord_num}}</p>
+                              </strong>
+                        </div>
+                        <div class="row col-6 border-left border-1 border-dark text-right">
+                              <div class="col text-left">Place Of Supply:&nbsp;</div>
+                              <div class="col text-left font-weight-bold">{{InvoiceData.pos}}</div>
+                        </div>
+                  </div>
+                  <div class="row border border-1 border-dark bg-light font-weight-bold">
+                        <div class="col p-1 pl-3">Bill To</div>
+                        <div class="col p-1">Ship To</div>
+                  </div>
+                  <div class="row border border-1 border-dark">
+                        <div class=" col py-2">
+                              <h5 class="text-primary">
+                                    {{InvoiceData.Cus_nm}}
+                              </h5>
+                        <p>
+                              {{InvoiceData.gstin}}
+                              </p> 
+                        </div>        
+                        <div class="col py-2">{{InvoiceData.gstin}}</div>
+                  </div>
+            
+                  <!-- ---------------------------------------------------------------------------------------------  -->
+            
+
+                  <!-- Table Head -->
+                  <div class="row border border-1 border-dark bg-light font-weight-bold" id="head">
+                        <div class="col border-right border-1 border-dark py-2 d-flex align-items-end justify-content-center">#</div>
+                        <div class="col border-right border-left border-1 border-dark py-2 d-flex align-items-end">Item & Description</div>
+                        <div class="col border-right border-left border-1 border-dark py-2 d-flex align-items-end justify-content-end">Qty</div>
+                        <div class="col border-right border-left border-1 border-dark py-2 d-flex align-items-end justify-content-end">Rate</div>
+                        <div class="col text-right border-right border-left border-1 border-dark"  *ngIf="InvoiceData.Org_des != InvoiceData.pos; else igstElse" >
+                              <div class="row border-bottom border-1 border-dark py-2">
+                                    <p class="m-auto">
+                                          IGST
+                                    </p>
+                              </div>
+                              <div class="row border-top border-1 border-dark">
+                                    <div class="col border-right border-1 border-dark py-1">%</div>
+                                    <div class="col border-left border-1 border-dark py-1">Amt</div>
+                              </div>
+                        </div>
+                        <ng-template #igstElse>
+                              <div class="col text-right border-right border-left border-1 border-dark">
+                                    <div class="row border-bottom border-1 border-dark py-2">
+                                          <p class="m-auto">
+                                                CGST
+                                          </p>
+                                    </div>
+                                    <div class="row border-top border-1 border-dark">
+                                          <div class="col border-right border-1 border-dark py-1">%</div>
+                                          <div class="col border-left border-1 border-dark py-1">Amt</div>
+                                    </div>
+                              </div>
+                              <div class="col text-right border-right border-left border-1 border-dark">
+                                    <div class="row border-bottom border-1 border-dark py-2">
+                                          <p class="m-auto">
+                                                SGST
+                                          </p>
+                                    </div>
+                                    <div class="row border-top border-1 border-dark">
+                                          <div class="col border-right border-1 border-dark py-1">%</div>
+                                          <div class="col border-left border-1 border-dark py-1">Amt</div>
+                                    </div>
+                              </div>
+                        </ng-template>
+                        <div class="col border-left border-1 border-dark py-2 d-flex align-items-end justify-content-end">Amount</div>
+                  </div>
+
+                  <!-- Table data -->
+                  <div class="row border border-1 border-dark" id="tableData" *ngFor="let itm of Itm_Obj; let i=index">
+                        <div class="col border-right border-1 border-dark text-center">{{i+1}}</div>
+                        <div class="col border-right border-left border-1 border-dark">{{itm.Itm_info}}</div>
+                        <div class="col border-right border-left border-1 border-dark text-right">{{itm.Itm_qty}}</div>
+                        <div class="col border-right border-left border-1 border-dark text-right">{{itm.Itm_rate}}</div>
+                        <div class="col text-right border-right border-left border-1 border-dark" *ngIf="InvoiceData.Org_des != InvoiceData.pos; else igstValueElse" >
+                              <div class="row border-top border-1 border-dark">
+                                    <div class="col border-right border-1 border-dark py-1">{{itm.Itm_tax + "%"}}</div>
+                                    <div class="col border-left border-1 border-dark py-1">{{itm.Itm_gstCharge}}</div>
+                              </div>
+                        </div>
+                        <ng-template #igstValueElse>
+                              <div class="col text-right border-right border-left border-1 border-dark">
+                                    <div class="row border-top border-1 border-dark">
+                                          <div class="col border-right border-1 border-dark py-1">{{itm.Itm_tax/2 + "%"}}</div>
+                                          <div class="col border-left border-1 border-dark py-1">{{itm.Itm_gstCharge/2}}</div>
+                                    </div>
+                              </div>
+                              <div class="col text-right border-right border-left border-1 border-dark">
+                                    <div class="row border-top border-1 border-dark">
+                                          <div class="col border-right border-1 border-dark py-1">{{itm.Itm_tax/2 + "%"}}</div>
+                                          <div class="col border-left border-1 border-dark py-1">{{itm.Itm_gstCharge/2}}</div>
+                                    </div>
+                              </div>
+                        </ng-template>
+                        <div class="col border-left border-1 border-dark text-right">{{itm.Itm_amt}}</div>
+                  </div>
+            </div>
+            <!-- ---------------------------------------------------------------------------------  -->
+      
+
+          <div id="bottom" class="row pt-2 border border-1 border-dark">
+                <div class="col-6 border-right border-1 border-dark">Total In Words <br>
+                      <strong>
+                            Indian Rupees {{GrdTot_InWord}}&nbsp;Only<br>
+                      </strong>
+                      <br>
+                      {{InvoiceData.Cus_note}} <br>
+                      <div id="qr" class=""></div>
+                </div>
+                
+                  <div class="col-6 border-left border-1 border-dark">
+                        <!-- ----------------CGST & SGST---------------------  -->
+                        <div class="row"  *ngIf="InvoiceData.Org_des == InvoiceData.pos ; else finalGstElse">
+                                    <div class="col text-center ">
+                                          Sub Total <br>
+                                          <span *ngFor="let gstEle of InvoiceData.gstArr | keyvalue">
+                                                CGST{{gstEle.key/2}}&nbsp;({{gstEle.key/2+"%)"}} <br>
+                                                SGST{{gstEle.key/2}}&nbsp;({{gstEle.key/2+"%)"}} <br>
+                                          </span>
+                                          <strong>
+                                                Total <br>
+                                                <span class="fs-3">
+                                                      Balance Due <br>
+                                                </span>
+                                          </strong>
+                                    </div>
+
+                                    <div class="col text-right">
+                                          {{InvoiceData.Sub_tot}}<br>
+                                                <span *ngFor="let gstEle of InvoiceData.gstArr | keyvalue">
+                                                      {{gstEle.value/2}} <br>
+                                                      {{gstEle.value/2}} <br>
+                                                </span>
+                                                <strong>
+                                                      ₹{{InvoiceData.Grd_tot}} <br> 
+                                                      <span>
+                                                            ₹{{InvoiceData.Grd_tot}} <br>
+                                                      </span>
+                                                </strong>
+                                    </div>
+                        </div>                              
+                              <!-- -------------------IGST-----------------  -->
+                                                            
+                        <ng-template #finalGstElse>
+                              <div class="row">
+                                    <div class="col text-center ">
+                                          Sub Total <br>            
+                                          <span *ngFor="let gstEle of InvoiceData.gstArr | keyvalue">
+                                                IGST{{gstEle.key}}&nbsp;({{gstEle.key+"%)"}} <br>
+                                          </span>
+                                          <strong>
+                                                Total <br>
+                                                <span class="fs-3">
+                                                      Balance Due
+                                                </span>
+                                          </strong>
+                                    </div>
+                                    <div class="col text-right">{{InvoiceData.Sub_tot}}<br>
+                                          <span *ngFor="let gstEle of InvoiceData.gstArr | keyvalue">
+                                                {{gstEle.value}} <br>
+                                          </span>
+                                          <strong>
+                                                ₹{{InvoiceData.Grd_tot}} <br> 
+                                                <span>
+                                                      ₹{{InvoiceData.Grd_tot}}
+                                                </span>
+                                          </strong>
+                                    </div>
+                              </div>
+                        </ng-template>
+                        <div class="row border-top border-1 border-dark pt-5">
+                              <p class="pt-5 m-auto font-weight-bold">
+                                    Authorized Signature
+                              </p>
+                        </div>
+                  </div>
+            </div>
+          <!-- <div id="qr" class="pb-5"></div> -->
+      </div>
+      <div id="imgTest"></div>
+</div>

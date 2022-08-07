@@ -1,0 +1,78 @@
+<div class="container-fluid ml-0" id="body">
+    <header class="sticky-top bg-white">
+        <div class="row border-top border-bottom border-1 py-3">
+            <h4>Email to {{InvoiceData.Cus_nm}}</h4>
+        </div>
+    </header>
+    <form method="post" #emailForm="ngForm" class="py-3">
+        <div class="row my-3">
+            <label class="col-2" for="From">From</label>
+            <input class="col-9" type="email" name="email_from" id="From" [(ngModel)]="email_from">
+        </div>
+        <div class="row my-3">
+            <label class="col-2" for="Send-To">Send To</label>
+            <input class="col-9" type="email" name="email_to" id="Send-To" [(ngModel)]="email_to">
+        </div>
+        <div class="row my-3">
+            <label class="col-2" for="Cc">Cc</label>
+            <input class="col-9" type="email" name="email_cc" id="Cc" [(ngModel)]="email_cc">
+        </div>
+        <div class="row my-3">
+            <label class="col-2" for="Bcc">Bcc</label>
+            <input class="col-9" type="email" name="email_bcc" id="Bcc" [(ngModel)]="email_bcc">
+        </div>
+        <div class="row my-3">
+            <label class="col-2" for="Subject">Subject</label>
+            <input class="col-9" type="email" name="email_subject" id="Subject" [(ngModel)]="email_subject">
+        </div>
+        <div class="row">
+            <span class="col-2" id="remove"></span>
+            <div class="col-9 border border-2 row p-2" id="add">
+                <div class="container border border-1 col" id="srcData">
+                    <div class="row text-center py-3" id="skyBlue">
+                        <h4 class="mx-auto text-white">
+                            Invoice&nbsp;#{{InvoiceData.Inv_num}}
+                        </h4>
+                    </div>
+                    <div class="row bg-light p-5" id="outerBox">
+                        <p class="mt-2">Dear {{InvoiceData.Cus_nm}}</p>
+                        <p>Thank you for your business. Your invoice can be viewed, printed and downloaded as PDF from the link below. You can also choose to pay it online.</p>
+                        <div class="col-12">
+                            <div class="col-10 border border-1 border-dark m-auto text-center" id="lightYellow">
+                                <div class=" border-bottom border-1 border-warning text-center">
+                                    <h5 class="mt-4 mx-3">INVOICE AMOUNT</h5>
+                                    <h5 class="text-danger mb-4 mx-3">₹{{InvoiceData.Grd_tot}}/-</h5>
+                                </div>
+                                <div class="my-4">
+                                    <div>
+                                        <label class="mx-5" for="Inv_num">Invoice No.</label>
+                                        <span class="mx-5 font-weight-bold" id="Inv_num">{{InvoiceData.Inv_num}}</span>
+                                    </div>
+                                    <div>
+                                        <label class="mx-5" for="Inv_dt">Invoice date</label>
+                                        <span class="mx-5 font-weight-bold" id="Inv_dt">{{InvoiceData.Inv_dt}}</span>
+                                    </div>
+                                    <div>
+                                        <label class="mx-5" for="Due_dt">Due date</label>
+                                        <span class="mx-5 font-weight-bold" id="Due_dt">{{InvoiceData.Due_dt}}</span>
+                                    </div>
+                                </div>
+                                <div class="my-4 mx-auto" id="qr"></div>
+                            </div>
+                        </div>
+                        <div class="py-2">
+                            <div class="font-weight-bold">Regards,</div>
+                            <div class="text-secondary">{{InvoiceData.Cus_nm}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+        <div class="row mt-5 border-top border-1 m-1">
+            <div class="col mt-3">
+                <button class="btn btn-success mx-1 border border-1" id="sBtn" (click)="sendEmail()">send</button>
+                <button class="btn btn-light mx-1 border border-1" id="cBtn">cancel</button>
+            </div>
+        </div>
+</div>

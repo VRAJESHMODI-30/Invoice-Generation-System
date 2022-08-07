@@ -1,0 +1,65 @@
+.row{
+      margin-bottom: 2rem;
+}
+.outer{
+      width:84.5vw;
+      font-size: medium;
+}
+
+@media only screen and (max-width:1032px) {
+      .outer{
+            width: 1200px;
+            margin-left: 25px;
+            padding-left: 30px;
+            font-size: 15px;
+      }
+      .name{
+            width: 300px;
+      }
+      #addLnBtn{
+            font-size: x-small;
+      }
+}  
+
+@media only screen and (max-width:650px) {
+      .outer{
+            width: 970px;
+            margin-left:30px;
+            font-size: small;
+      }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* ------------------------ */
+.bottom-0 {
+      bottom: 0!important;
+  }
+  .position-fixed {
+      position: fixed!important;
+  }
+
+  .rounded {
+      border-radius: 0.25rem!important;
+  }
+
+  .bg-body {
+      --bs-bg-opacity: 1;
+      background-color: rgba(var(--bs-body-bg-rgb),var(--bs-bg-opacity))!important;
+  }
+
+  .fs-4 {
+      font-size: 1.5rem!important;
+  }
+
+
+  
